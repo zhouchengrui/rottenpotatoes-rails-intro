@@ -9,15 +9,26 @@ class MoviesController < ApplicationController
   def index
     @ratings_to_show = []
     @all_ratings = ['G','PG','PG-13','R']
-    @ratings = params[:ratings]
+    @ratings = params[:ratings] || session[:ratings]
     @movies = Movie.with_ratings(@ratings)
     
-    @sort = params[:sort] 
+    @sort = params[:sort] || session[:sort]
     case @sort
     when 'title'
      @title_header = 'hilite'
     when 'release_date'
      @release_date_header = 'hilite'
+    end
+    
+    if params[:sort] != session[:sort]
+      session[:sort] = @sort
+      redirect_to :sort => @sort, :ratings => @ratings and return
+    end
+    
+    if params[:ratings] != session[:ratings] 
+      session[:sort] = @sort
+      session[:ratings] = @ratings
+      redirect_to :sort => @sort, :ratings => @ratings and return
     end
     
     if @sort
