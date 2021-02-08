@@ -9,7 +9,7 @@ class MoviesController < ApplicationController
   def index
     @ratings_to_show = ['G','PG','PG-13','R','NC-17']
     @all_ratings = ['G','PG','PG-13','R','NC-17']
-    @ratings = params[:ratings] || session[:ratings]
+    @ratings = params[:ratings] || session[:ratings] || {}
     @ratings_to_show = @ratings
     @movies = Movie.with_ratings(@ratings)
     
@@ -19,6 +19,10 @@ class MoviesController < ApplicationController
      @title_header = 'hilite'
     when 'release_date'
      @release_date_header = 'hilite'
+    end
+    
+    if @ratings == {}
+      Hash[@ratings.map {|rating| [rating, rating]}]
     end
     
     if params[:sort] != session[:sort]
