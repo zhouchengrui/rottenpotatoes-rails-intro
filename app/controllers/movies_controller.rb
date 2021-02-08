@@ -7,7 +7,7 @@ class MoviesController < ApplicationController
   end
 
   def index
-    @ratings_to_show = []
+    @ratings_to_show = ['G','PG','PG-13','R','NC-17']
     @all_ratings = ['G','PG','PG-13','R','NC-17']
     @ratings = params[:ratings] || session[:ratings]
     @movies = Movie.with_ratings(@ratings)
